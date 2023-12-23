@@ -1,6 +1,11 @@
+import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class RegistrationScreen extends StatefulWidget implements Identifiable {
+
+  @override
+  static String id = "registration_screen";
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }

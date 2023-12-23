@@ -1,6 +1,11 @@
+import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class WelcomeScreen extends StatefulWidget implements Identifiable{
+
+  @override
+  static String id = "welcome_screen";
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
