@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class RegistrationScreen extends StatefulWidget implements Identifiable {
 
   @override
-  static String id = "registration_screen";
+  static String id = "/registration_screen";
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
