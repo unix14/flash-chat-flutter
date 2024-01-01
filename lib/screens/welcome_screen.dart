@@ -17,6 +17,7 @@ class WelcomeScreen extends StatefulWidget implements Identifiable{
 class _WelcomeScreenState extends State<WelcomeScreen>  with SingleTickerProviderStateMixin {
 
   AnimationController _controller;
+  Animation _animation;
   //todo build loading widget with animation controller
 
   @override
@@ -25,21 +26,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>  with SingleTickerProvide
 
     _controller = AnimationController(
       vsync: this,
-      upperBound: 100.0,
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
     );
+    _animation = ColorTween(begin: Colors.lightBlueAccent, end: Colors.white).animate(_controller);
+
     _controller.forward();
 
     _controller.addListener(() {
       setState(() {});
-      print(_controller.value);
+      print(_animation.value);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: _animation.value,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -52,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>  with SingleTickerProvide
                   tag: "logo",
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: _controller.value,
+                    height: 60.0,
                   ),
                 ),
                 Text(
