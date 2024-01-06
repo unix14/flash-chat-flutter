@@ -45,15 +45,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      //Implement send functionality.
-                    },
-                    child: Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
-                    ),
-                  ),
+                  // FlatButton(
+                  //   onPressed: () {
+                  //     //Implement send functionality.
+                  //   },
+                  //   child: Text(
+                  //     'Send',
+                  //     style: kSendButtonTextStyle,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

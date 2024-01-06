@@ -17,8 +17,8 @@ class WelcomeScreen extends StatefulWidget implements Identifiable {
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation _animation;
+  late AnimationController _controller;
+  late Animation _animation;
 
   //todo build loading widget with animation controller
 

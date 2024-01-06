@@ -2,5 +2,5 @@
 
 abstract class Identifiable {
 
-  static String id;
+  static String id = "";
 }

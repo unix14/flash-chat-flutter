@@ -1,4 +1,4 @@
-package co.appbrewery.flash_chat_flutter
+package com.triPCups.flash_chat_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
