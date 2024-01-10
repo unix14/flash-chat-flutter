@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
@@ -12,6 +13,23 @@ class ChatScreen extends StatefulWidget implements Identifiable {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  //refactor out as a singleton
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
+
+  void loadUser() {
+    final User? user = _auth.currentUser;
+    if(user != null) {
+      loggedInUser = user;
+    }
+  }
+
+  @override
+  void initState() {
+    loadUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
