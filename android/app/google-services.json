@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "390865169745",
+    "firebase_url": "https://flutter-projects-420-default-rtdb.firebaseio.com",
+    "project_id": "flutter-projects-420",
+    "storage_bucket": "flutter-projects-420.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390865169745:android:e0479b39c66f95f48ef770",
+        "android_client_info": {
+          "package_name": "com.eyalya.fcmService"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb4H0J-RMQN12uWwERCl18uF5Xl3ADMOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390865169745:android:425f760775fa430e8ef770",
+        "android_client_info": {
+          "package_name": "com.triPCups.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb4H0J-RMQN12uWwERCl18uF5Xl3ADMOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390865169745:android:22fb3d07d4644d9f8ef770",
+        "android_client_info": {
+          "package_name": "com.triPCups.funny.tamir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb4H0J-RMQN12uWwERCl18uF5Xl3ADMOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390865169745-dd97ch8kfp6mavhpqnass31j5d6krpev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
