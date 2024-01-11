@@ -9,11 +9,18 @@ class ChatScreen extends StatefulWidget implements Identifiable {
   @override
   static String id = "/chat_screen";
 
+  static String kFirestoreCollection_messages = "messages";
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+
+  // CollectionReference called users that references the firestore collection
+  CollectionReference users = FirebaseFirestore.instance.collection(ChatScreen.kFirestoreCollection_messages);
+
   //refactor out as a singleton
   final _auth = FirebaseAuth.instance;
   User? loggedInUser;
@@ -34,6 +41,16 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+  void messagesStream() async {
+    // List<Message> messages = [];
+    await for (var snapshot in users.snapshots()) {
+      for(var message in snapshot.docs) {
+        // messages.add(message);
+        print(message.data(), );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +58,12 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: Icon(Icons.refresh_rounded),
               onPressed: () {
+                // messagesStream();
                 //Implement logout functionality
-                _auth.signOut();
-                Navigator.pop(context);
+                // _auth.signOut();
+                // Navigator.pop(context);
               }),
         ],
         title: Text('⚡️Chat'),
@@ -56,6 +74,30 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder<QuerySnapshot<Object?>>(
+                stream: users.snapshots(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    final messages = snapshot.data?.docs ?? [];
+                    List<Text> messageWidgets = [];
+                    for(var msg in messages) {
+                      Map<String, dynamic> data = msg.data()! as Map<String, dynamic>;
+                      final msgTxt = data['text'];
+                      final senderId = data['senderId'];
+                      print("mssgg txt is $msgTxt");
+                      print("senderId is $senderId");
+
+                      final msgWidget = Text("${senderId}: $msgTxt");
+                      messageWidgets.add(msgWidget);
+                    }
+                    return Column(
+                      children: messageWidgets,
+                    );
+                  } else {
+                    return Spacer();
+                  }
+
+            },),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -73,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   TextButton(
                     onPressed: () {
                       //Implement send functionality.
-                      _firestore.collection("messages").add({
+                      users.add({
                         "text": messageText,
                         "senderId": loggedInUser?.email,
                       });
