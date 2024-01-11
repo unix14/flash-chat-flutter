@@ -1,11 +1,18 @@
+import 'dart:math';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/common/constants.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
+import 'package:flash_chat/widgets/message_bubble.dart';
+import 'package:flash_chat/widgets/messages_stream.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants.dart';
+
+import '../common/globals.dart';
+import '../models/ChatMessage.dart';
 
 class ChatScreen extends StatefulWidget implements Identifiable {
-
   @override
   static String id = "/chat_screen";
 
@@ -17,20 +24,16 @@ class ChatScreen extends StatefulWidget implements Identifiable {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-
-  // CollectionReference called users that references the firestore collection
-  CollectionReference users = FirebaseFirestore.instance.collection(ChatScreen.kFirestoreCollection_messages);
-
   //refactor out as a singleton
   final _auth = FirebaseAuth.instance;
-  User? loggedInUser;
+  TextEditingController messageTextController = TextEditingController();
 
-  final _firestore = FirebaseFirestore.instance;
   String messageText = "";
+  bool _isBtnActivated = false;
 
   void loadUser() {
     final User? user = _auth.currentUser;
-    if(user != null) {
+    if (user != null) {
       loggedInUser = user;
     }
   }
@@ -41,16 +44,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-  void messagesStream() async {
-    // List<Message> messages = [];
-    await for (var snapshot in users.snapshots()) {
-      for(var message in snapshot.docs) {
-        // messages.add(message);
-        print(message.data(), );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,15 +51,38 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.refresh_rounded),
+              icon: Icon(Icons.logout),
               onPressed: () {
                 // messagesStream();
-                //Implement logout functionality
-                // _auth.signOut();
-                // Navigator.pop(context);
+                //todo Implement logout functionality
+                _auth.signOut();
+                Navigator.pop(context);
               }),
         ],
-        title: Text('⚡️Chat'),
+        title: Center(
+          child: AnimatedTextKit(animatedTexts: [
+            //todo refactor to possibleTexts list + shuffle
+            TypewriterAnimatedText('⚡️ Chat',
+                textStyle: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w900,
+                ),
+                speed: Duration(milliseconds: 20)),
+            TypewriterAnimatedText('⚡️⚡️⚡️',
+                textStyle: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w900,
+                ),
+                speed: Duration(milliseconds: 20)),
+            TypewriterAnimatedText('⚡️Flash⚡️',
+                textStyle: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w900,
+                ),
+                speed: Duration(milliseconds: 20)),
+          ], repeatForever: true
+          ),
+        ),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -74,30 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamBuilder<QuerySnapshot<Object?>>(
-                stream: users.snapshots(),
-                builder: (context, snapshot) {
-                  if(snapshot.hasData) {
-                    final messages = snapshot.data?.docs ?? [];
-                    List<Text> messageWidgets = [];
-                    for(var msg in messages) {
-                      Map<String, dynamic> data = msg.data()! as Map<String, dynamic>;
-                      final msgTxt = data['text'];
-                      final senderId = data['senderId'];
-                      print("mssgg txt is $msgTxt");
-                      print("senderId is $senderId");
-
-                      final msgWidget = Text("${senderId}: $msgTxt");
-                      messageWidgets.add(msgWidget);
-                    }
-                    return Column(
-                      children: messageWidgets,
-                    );
-                  } else {
-                    return Spacer();
-                  }
-
-            },),
+            MessagesStream(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -105,25 +98,38 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: messageTextController,
                       onChanged: (value) {
-                        //Do something with the user input.
-                        messageText = value;
+                        setState(() {
+                          messageText = value;
+                          _isBtnActivated = messageText.isNotEmpty;
+                        });
                       },
                       decoration: kMessageTextFieldDecoration,
+                      // style: Text,
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      //Implement send functionality.
+                    onPressed: _isBtnActivated ? () {
+                      if(messageText.isEmpty) {
+                        //todo show error or disable send button
+                        return;
+                      }
                       users.add({
                         "text": messageText,
                         "senderId": loggedInUser?.email,
                       });
-                    },
+                      setState(() {
+                        messageTextController.clear();
+                        messageText = "";
+                        _isBtnActivated = false;
+                      });
+                    } : null,
                     child: Text(
                       'Send',
-                      style: kSendButtonTextStyle,
+                      style: kSendButtonTextStyle.copyWith(),
                     ),
+                    style: ButtonStyle(),
                   ),
                 ],
               ),

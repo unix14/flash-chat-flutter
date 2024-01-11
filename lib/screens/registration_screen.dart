@@ -6,7 +6,7 @@ import 'package:flash_chat/widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../constants.dart';
+import '../common/constants.dart';
 
 class RegistrationScreen extends StatefulWidget implements Identifiable {
 

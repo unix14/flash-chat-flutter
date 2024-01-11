@@ -53,34 +53,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           children: <Widget>[
             Row(
               children: <Widget>[
-                Hero(
-                  tag: "logo",
-                  child: Container(
-                    child: Image.asset('images/logo.png'),
-                    height: 60.0,
+                Flexible(
+                  child: Hero(
+                    tag: "logo",
+                    child: Container(
+                      child: Image.asset('images/logo.png'),
+                      height: 60.0,
+                    ),
                   ),
                 ),
-                TypewriterAnimatedTextKit(
-                  text: ['Flash Chat'],
+                AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText('Flash Chat',
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                   ),
+                  ),],
+                  isRepeatingAnimation: true,
                 ),
               ],
             ),
             SizedBox(
               height: 48.0,
             ),
-            Hero(
-              tag: "loginBtn",
-              child: RoundedButton(
-                  title: 'Log In',
-                  color: Colors.lightBlueAccent,
-                  onPressed: () {
-                    //Go to registration screen.
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  }),
+            Flexible(
+              child: Hero(
+                tag: "loginBtn",
+                child: RoundedButton(
+                    title: 'Log In',
+                    color: Colors.lightBlueAccent,
+                    onPressed: () {
+                      //Go to registration screen.
+                      Navigator.pushNamed(context, LoginScreen.id);
+                    }),
+              ),
             ),
             Hero(
               tag: "regBtn",
