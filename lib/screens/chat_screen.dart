@@ -1,16 +1,11 @@
-import 'dart:math';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/common/constants.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
-import 'package:flash_chat/widgets/message_bubble.dart';
 import 'package:flash_chat/widgets/messages_stream.dart';
 import 'package:flutter/material.dart';
 
 import '../common/globals.dart';
-import '../models/chat_message.dart';
 
 class ChatScreen extends StatefulWidget implements Identifiable {
   @override
@@ -49,6 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: null,
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.logout),

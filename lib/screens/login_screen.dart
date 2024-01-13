@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/common/preferences_manager.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
+import 'package:flash_chat/managers/login_manager.dart';
+import 'package:flash_chat/models/UserCredentials.dart';
 import 'package:flash_chat/widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../mixins/login_operations.dart';
 import 'chat_screen.dart';
 
 class LoginScreen extends StatefulWidget implements Identifiable {
@@ -17,9 +18,8 @@ class LoginScreen extends StatefulWidget implements Identifiable {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with LoginOperationsMixin{
+class _LoginScreenState extends State<LoginScreen>{
   //refactor out as a singleton
-  final _auth = FirebaseAuth.instance;
   String email = "";
   String password = "";
   bool _isLoading = false;
@@ -126,17 +126,11 @@ class _LoginScreenState extends State<LoginScreen> with LoginOperationsMixin{
                       setState(() {
                         _isLoading = true;
                       });
-                      try {
-                        UserCredential? result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-                        if(result.user != null) {
-                          Navigator.popAndPushNamed(context, ChatScreen.id);
-                          PreferencesManager.saveUserToPrefs(email, password);
-                        } else {
-                          //todo show error message
-                        }
-                      } catch(e) {
-                        //todo show error message
-                      }
+                      UserCredentials user = UserCredentials(email: email, password: password);
+                      LoginManager.doLogin(user, () {
+                        Navigator.popAndPushNamed(context, ChatScreen.id);
+                        PreferencesManager.saveUser(email, password);
+                      });
                       setState(() {
                         _isLoading = false;
                       });

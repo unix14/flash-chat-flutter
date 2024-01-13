@@ -1,23 +1,23 @@
-import 'package:flash_chat/common/globals.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_chat/common/preferences_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
+import 'package:flutter/material.dart';
+
 import 'common/constants.dart';
 import 'firebase_options.dart';
-import 'mixins/login_operations.dart';
+import 'models/UserCredentials.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await PreferencesManager.getPrefs();
 
-  String storedEmail = prefs.getString(kStoredEmailTag) ?? "";
-  String storedPass = prefs.getString(kStoredPassTag) ?? "";
+  UserCredentials user = await PreferencesManager.getUser();
+
   var initialRoute = WelcomeScreen.id;
-  if(storedEmail.isNotEmpty && storedPass.isNotEmpty) {
+  if(user.email.isNotEmpty && user.password.isNotEmpty) {
     initialRoute = ChatScreen.id;
   }
 
@@ -27,7 +27,7 @@ Future<void> main() async {
   runApp(FlashChat(initialRoute));
 }
 
-class FlashChat extends StatefulWidget with LoginOperationsMixin {
+class FlashChat extends StatefulWidget {
 
   String initialRoute;
 
@@ -39,7 +39,7 @@ class FlashChat extends StatefulWidget with LoginOperationsMixin {
   }
 }
 
-class _FlashChatMainState extends State<FlashChat> with LoginOperationsMixin {
+class _FlashChatMainState extends State<FlashChat> {
 
   late String initialRoute;
 

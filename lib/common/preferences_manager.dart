@@ -1,12 +1,11 @@
+import 'package:flash_chat/models/UserCredentials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 
 class PreferencesManager {
-  static SharedPreferences? instance;
 
-  // static String storedEmail = "";
-  // static String storedPass = "";
+  static SharedPreferences? instance;
 
   // Obtain shared preferences.
   static Future<SharedPreferences> getPrefs() async {
@@ -17,12 +16,14 @@ class PreferencesManager {
     return instance!;
   }
 
-  // void loadPrefs(SharedPreferences prefs) async {
-  //   storedEmail = prefs.getString(kStoredEmailTag) ?? "";
-  //   storedPass = prefs.getString(kStoredPassTag) ?? "";
-  // }
+  static Future<UserCredentials> getUser() async {
+    var storedEmail = instance?.getString(kStoredEmailTag) ?? "";
+    var storedPass = instance?.getString(kStoredPassTag) ?? "";
+    var user = UserCredentials(email: storedEmail, password: storedPass);
+    return user;
+  }
 
-  static void saveUserToPrefs(String newEmail, String newPass) async {
+  static void saveUser(String newEmail, String newPass) async {
     instance?.setString(kStoredEmailTag, newEmail);
     instance?.setString(kStoredPassTag, newPass);
   }

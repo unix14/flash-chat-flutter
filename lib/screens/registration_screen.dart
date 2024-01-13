@@ -1,7 +1,7 @@
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/common/globals.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
+import 'package:flash_chat/managers/login_manager.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/constants.dart';
 import '../common/preferences_manager.dart';
-import '../mixins/login_operations.dart';
+import '../models/UserCredentials.dart';
 
 class RegistrationScreen extends StatefulWidget implements Identifiable {
 
@@ -20,7 +20,7 @@ class RegistrationScreen extends StatefulWidget implements Identifiable {
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> with LoginOperationsMixin {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   //refactor out as a singleton
   final _auth = FirebaseAuth.instance;
   String email = "";
@@ -94,18 +94,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> with LoginOpera
                       setState(() {
                         _isLoading = true;
                       });
-                      try {
-                        final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-                        if(newUser.user != null) {
-                          Navigator.popAndPushNamed(context, ChatScreen.id);
-                          PreferencesManager.saveUserToPrefs(email, password); //todo fix
-                        } else {
-                          //todo show error message
-                        }
-                      } catch (e) {
-                        //todo show error message
-                        print (e);
-                      }
+                      UserCredentials user = UserCredentials(email: email, password: password);
+                      LoginManager.doRegister(user, () {
+                        Navigator.popAndPushNamed(context, ChatScreen.id);
+                        PreferencesManager.saveUser(email, password);
+                      });
                       setState(() {
                         _isLoading = false;
                       });
