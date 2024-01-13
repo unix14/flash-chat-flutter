@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../common/globals.dart';
-import '../models/ChatMessage.dart';
+import '../models/chat_message.dart';
 import 'message_bubble.dart';
 
 class MessagesStream extends StatelessWidget {
@@ -43,7 +43,7 @@ class MessagesStream extends StatelessWidget {
           }
           return Expanded(
             child: ListView(
-              reverse: true,
+              // reverse: true,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               children: messageWidgets,
             ),

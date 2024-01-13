@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/common/preferences_manager.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flash_chat/widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../mixins/login_operations.dart';
 import 'chat_screen.dart';
 
 class LoginScreen extends StatefulWidget implements Identifiable {
@@ -15,7 +17,7 @@ class LoginScreen extends StatefulWidget implements Identifiable {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with LoginOperationsMixin{
   //refactor out as a singleton
   final _auth = FirebaseAuth.instance;
   String email = "";
@@ -128,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         UserCredential? result = await _auth.signInWithEmailAndPassword(email: email, password: password);
                         if(result.user != null) {
                           Navigator.popAndPushNamed(context, ChatScreen.id);
+                          PreferencesManager.saveUserToPrefs(email, password);
                         } else {
                           //todo show error message
                         }

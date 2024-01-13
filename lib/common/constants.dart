@@ -31,3 +31,7 @@ var kInputDecoration = InputDecoration(
   enabledBorder: kOutlineBorder.copyWith(borderSide: BorderSide(color: Colors.blueAccent, width: 1.0)),
   focusedBorder:kOutlineBorder.copyWith(borderSide: BorderSide(color: Colors.blueAccent, width: 2.0)),
 );
+
+
+String kStoredEmailTag = "3mA!l";
+String kStoredPassTag = "p/ss";

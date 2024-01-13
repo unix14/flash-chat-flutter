@@ -13,7 +13,7 @@
 
     <application
         android:name="${applicationName}"
-        android:label="flash_chat"
+        android:label="Flash Chat"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name="io.flutter.embedding.android.FlutterActivity"

@@ -10,7 +10,7 @@ import 'package:flash_chat/widgets/messages_stream.dart';
 import 'package:flutter/material.dart';
 
 import '../common/globals.dart';
-import '../models/ChatMessage.dart';
+import '../models/chat_message.dart';
 
 class ChatScreen extends StatefulWidget implements Identifiable {
   @override
@@ -100,8 +100,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       controller: messageTextController,
                       onChanged: (value) {
-                        setState(() {
                           messageText = value;
+                        setState(() {
                           _isBtnActivated = messageText.isNotEmpty;
                         });
                       },
