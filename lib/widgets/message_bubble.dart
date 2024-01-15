@@ -5,18 +5,18 @@ import '../models/chat_message.dart';
 class MessageBubble extends StatelessWidget {
   final ChatMessage message;
   final bool isMe;
-  final bool isContinusMessage;
+  bool isContinuousMessage;
 
-  MessageBubble({required this.message, required this.isMe, required this.isContinusMessage});
+  MessageBubble({required this.message, required this.isMe, this.isContinuousMessage = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(vertical: isContinuousMessage? 5 : 10, horizontal: 10),
       child: Column(
         crossAxisAlignment: isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: [
-          isContinusMessage ? Container() : Text(message.senderId,
+          isContinuousMessage ? Container() : Text(message.senderId,
           style: TextStyle(fontSize: 12,color: Colors.black54),),
           Material(
             borderRadius: BorderRadius.only(

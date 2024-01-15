@@ -4,7 +4,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/widgets/RoundedButton.dart';
+import 'package:flash_chat/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget implements Identifiable {
@@ -85,7 +85,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     color: Colors.lightBlueAccent,
                     onPressed: () {
                       //Go to registration screen.
-                      Navigator.pushNamed(context, LoginScreen.id);
+                      Navigator.pushReplacementNamed(context, LoginScreen.id);
                     }),
               ),
             ),
@@ -96,7 +96,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   color: Colors.blueAccent,
                   onPressed: () {
                     //Go to registration screen.
-                    Navigator.pushNamed(context, RegistrationScreen.id);
+                    Navigator.pushReplacementNamed(context, RegistrationScreen.id);
                   }),
             ),
           ],

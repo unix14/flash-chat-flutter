@@ -1,4 +1,4 @@
-import 'package:flash_chat/models/UserCredentials.dart';
+import 'package:flash_chat/models/user_credentials.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
@@ -23,8 +23,14 @@ class PreferencesManager {
     return user;
   }
 
-  static void saveUser(String newEmail, String newPass) async {
-    instance?.setString(kStoredEmailTag, newEmail);
-    instance?.setString(kStoredPassTag, newPass);
+  static void saveUser(UserCredentials user) async {
+    //todo use json parser to set and get functions
+    instance?.setString(kStoredEmailTag, user.email);
+    instance?.setString(kStoredPassTag, user.password);
+  }
+
+  static void deleteUser() async {
+    instance?.setString(kStoredEmailTag, "");
+    instance?.setString(kStoredPassTag, "");
   }
 }

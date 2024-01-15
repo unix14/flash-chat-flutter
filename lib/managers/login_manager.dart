@@ -1,7 +1,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/UserCredentials.dart';
+import '../common/preferences_manager.dart';
+import '../models/user_credentials.dart';
 
 class LoginManager {
 
@@ -11,6 +12,7 @@ class LoginManager {
     try {
       UserCredential? result = await auth.createUserWithEmailAndPassword(email: user.email, password: user.password);
       if(result.user != null) {
+        PreferencesManager.saveUser(user);
         callback();
       } else {
         //todo show error message
@@ -20,14 +22,29 @@ class LoginManager {
     }
   }
 
-  static void doLogin(UserCredentials user, Function() callback) async {
+  static Future<bool> doLogin(UserCredentials user, {Function()? callback = null}) async {
     try {
       UserCredential? result = await auth.signInWithEmailAndPassword(email: user.email, password: user.password);
+      print("wow login result is #$result");
       if(result.user != null) {
-        callback();
+        PreferencesManager.saveUser(user);
+        if(callback != null)
+          callback();
+        return true;
       } else {
         //todo show error message
       }
+    } catch(e) {
+      //todo show error message
+    }
+    return false;
+  }
+
+  static void doLogout(Function() callback) async {
+    try {
+      await auth.signOut();
+      PreferencesManager.deleteUser();
+      callback();
     } catch(e) {
       //todo show error message
     }

@@ -2,11 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/common/preferences_manager.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flash_chat/managers/login_manager.dart';
-import 'package:flash_chat/models/UserCredentials.dart';
-import 'package:flash_chat/widgets/RoundedButton.dart';
+import 'package:flash_chat/models/user_credentials.dart';
+import 'package:flash_chat/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'chat_screen.dart';
 
 class LoginScreen extends StatefulWidget implements Identifiable {
@@ -123,19 +125,56 @@ class _LoginScreenState extends State<LoginScreen>{
                     title: 'Log In',
                     color: Colors.lightBlueAccent,
                     onPressed: () async {
+                      //todo refactor validation to mixin
+                      bool emailValidation = !EmailValidator.validate(email);
+                      bool passwordEmpty = password.isEmpty;
+                      bool passwordLength = password.length < 7 && password.length < 13;
+                      if(emailValidation || passwordEmpty || passwordLength) {
+                        String errorMsg = "Error unknown";
+
+                        if(emailValidation) {
+                          errorMsg = "Mail address is malformed";
+                        }
+                        if(passwordEmpty) {
+                          errorMsg = "Password must not be empty";
+                        }
+                        if(passwordLength) {
+                          errorMsg = "Password length should be between 6 and 12 characters";
+                        }
+
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Error",
+                          desc: errorMsg,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "ok",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                        return;
+                      }
                       setState(() {
                         _isLoading = true;
                       });
                       UserCredentials user = UserCredentials(email: email, password: password);
-                      LoginManager.doLogin(user, () {
+                      /*var result = await*/ LoginManager.doLogin(user, callback: () {
+                        //todo make error pop up when error occurs like this :
+                        // RecaptchaCallWrapper(13551): Initial task failed for action RecaptchaAction(action=signInWithPassword)with exception - We have blocked all requests from this device due to unusual activity. Try again later. [ Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. ]
                         Navigator.popAndPushNamed(context, ChatScreen.id);
-                        PreferencesManager.saveUser(email, password);
                       });
+                      // if(result) {
+                      //
+                      // }
                       setState(() {
                         _isLoading = false;
                       });
-                      // Future.delayed(Duration(seconds: 2), () {
-                      // });
                     }),
               ),
             ],

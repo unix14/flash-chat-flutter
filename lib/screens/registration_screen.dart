@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flash_chat/managers/login_manager.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
-import 'package:flash_chat/widgets/RoundedButton.dart';
+import 'package:flash_chat/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../common/constants.dart';
-import '../common/preferences_manager.dart';
-import '../models/UserCredentials.dart';
+import '../models/user_credentials.dart';
 
 class RegistrationScreen extends StatefulWidget implements Identifiable {
 
@@ -21,8 +20,6 @@ class RegistrationScreen extends StatefulWidget implements Identifiable {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  //refactor out as a singleton
-  final _auth = FirebaseAuth.instance;
   String email = "";
   String password = "";
   bool _isLoading = false;
@@ -97,7 +94,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       UserCredentials user = UserCredentials(email: email, password: password);
                       LoginManager.doRegister(user, () {
                         Navigator.popAndPushNamed(context, ChatScreen.id);
-                        PreferencesManager.saveUser(email, password);
                       });
                       setState(() {
                         _isLoading = false;

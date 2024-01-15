@@ -1,49 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../common/globals.dart';
 import '../models/chat_message.dart';
 import 'message_bubble.dart';
 
+// ignore: must_be_immutable
 class MessagesStream extends StatelessWidget {
 
-  final List<ChatMessage> _messages = [];
+  late ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Object?>>(
-      stream: users.snapshots(),
+      stream: messages.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final messages = snapshot.data?.docs.reversed ?? [];
-          List<Widget> messageWidgets = [];
+          final messages = snapshot.data?.docs ?? [];
+          List<MessageBubble> messageWidgets = [];
           String? lastSenderId = null;
 
           for (var msg in messages) {
             Map<String, dynamic> data = msg.data()! as Map<String, dynamic>;
             final text = data['text'] ?? "";
             final senderId = data['senderId'] ?? "";
+            final Timestamp date = data['date'] ?? Timestamp(0, 0);
 
-            ChatMessage newChatMsg = ChatMessage(senderId: senderId, text: text);
-            _messages.add(newChatMsg);
-          }
+            ChatMessage newChatMsg = ChatMessage(senderId: senderId, text: text, date: date.toDate());
 
-          _messages.sort((msgA, msgB) =>
-            msgA.date.compareTo(msgB.date)
-          );
-
-          for(var msg in _messages) {
             final msgWidget = MessageBubble(
-              message: msg,
-              isMe: loggedInUser?.email == msg.senderId,
-              isContinusMessage: lastSenderId == msg.senderId,
+              message: newChatMsg,
+              isMe: loggedInUser?.email == newChatMsg.senderId,
             );
             messageWidgets.add(msgWidget);
-            lastSenderId = msg.senderId;
           }
+          //Sort by date of publication
+          messageWidgets.sort((msgA, msgB) =>
+            msgA.message.date.compareTo(msgB.message.date)
+          );
+          //Assign lastSenderId to indicate continuous message
+          messageWidgets.forEach((element) {
+            element.isContinuousMessage = lastSenderId == element.message.senderId;
+            //todo make previous message also continuous message
+            lastSenderId = element.message.senderId;
+          });
+          //Animate scroll to end of list when a new message is being added
+          Future.delayed(Duration.zero, () {
+            if(_controller.hasClients) {
+              _controller.animateTo(
+                _controller.position.maxScrollExtent + 100,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 500),);
+            }
+          });
           return Expanded(
             child: ListView(
-              // reverse: true,
+              controller: _controller,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               children: messageWidgets,
             ),
