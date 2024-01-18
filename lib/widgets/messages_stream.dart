@@ -6,13 +6,13 @@ import '../common/globals.dart';
 import '../models/chat_message.dart';
 import 'message_bubble.dart';
 
-// ignore: must_be_immutable
 class MessagesStream extends StatelessWidget {
 
-  late ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    //todo refactor server code out of here
     return StreamBuilder<QuerySnapshot<Object?>>(
       stream: messages.snapshots(),
       builder: (context, snapshot) {
