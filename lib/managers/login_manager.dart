@@ -1,12 +1,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../common/globals.dart';
 import '../common/preferences_manager.dart';
 import '../models/user_credentials.dart';
 
 class LoginManager {
-
-  static FirebaseAuth auth = FirebaseAuth.instance;
 
   static void doRegister(UserCredentials user, Function() callback) async {
     try {

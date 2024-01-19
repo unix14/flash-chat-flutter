@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/common/ErrorPopup.dart';
 import 'package:flash_chat/common/preferences_manager.dart';
 import 'package:flash_chat/interfaces/identifiable.dart';
 import 'package:flash_chat/managers/login_manager.dart';
@@ -129,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen>{
                       bool emailValidation = !EmailValidator.validate(email);
                       bool passwordEmpty = password.isEmpty;
                       bool passwordLength = password.length < 7 && password.length < 13;
-                      if(emailValidation || passwordEmpty || passwordLength) {
+                      if(emailValidation || passwordEmpty || !passwordLength) {
                         String errorMsg = "Error unknown";
 
                         if(emailValidation) {
@@ -138,26 +139,10 @@ class _LoginScreenState extends State<LoginScreen>{
                         if(passwordEmpty) {
                           errorMsg = "Password must not be empty";
                         }
-                        if(passwordLength) {
+                        if(!passwordLength) {
                           errorMsg = "Password length should be between 6 and 12 characters";
                         }
-
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          title: "Error",
-                          desc: errorMsg,
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "ok",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              width: 120,
-                            )
-                          ],
-                        ).show();
+                        ErrorPopup.open(context, "Error", errorMsg);
                         return;
                       }
                       setState(() {

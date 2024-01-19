@@ -1,4 +1,5 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const kSendButtonTextStyle = TextStyle(
@@ -34,11 +35,19 @@ var kInputDecoration = InputDecoration(
 );
 
 
-CurvedNavigationBarItem getBottomMenuItem(String text, IconData selectedIcon, IconData unselectedIcon, bool isSelected) {
-  return CurvedNavigationBarItem(
-      child: Icon(isSelected ? selectedIcon : unselectedIcon,color: isSelected ? Colors.lightBlueAccent : null,),
+getBottomMenuItem(String text, IconData selectedIcon, IconData unselectedIcon, bool isSelected) {
+  if(kIsWeb) {
+    return BottomNavigationBarItem(
+      activeIcon: Icon(selectedIcon),
+      icon: Icon(isSelected ? selectedIcon : unselectedIcon,color: isSelected ? Colors.lightBlueAccent : null,),
       label: text,
-      labelStyle: isSelected ? null : TextStyle(color: Colors.black54));
+    );
+  } else {
+    return CurvedNavigationBarItem(
+        child: Icon(isSelected ? selectedIcon : unselectedIcon,color: isSelected ? Colors.lightBlueAccent : null,),
+        label: text,
+        labelStyle: isSelected ? null : TextStyle(color: Colors.black54));
+  }
 }
 
 String kStoredEmailTag = "3mA!l";
