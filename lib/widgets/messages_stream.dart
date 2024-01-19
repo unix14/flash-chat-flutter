@@ -8,7 +8,7 @@ import 'message_bubble.dart';
 
 class MessagesStream extends StatefulWidget {
 
-  Stream<QuerySnapshot<Object?>> stream;
+  final Stream<QuerySnapshot<Object?>> stream;
 
   MessagesStream(this.stream);
 
